@@ -1,3 +1,5 @@
+import java.util.LinkedList;
+import java.util.Queue;
 import java.util.Scanner;
 
 class Impresion{
@@ -71,20 +73,57 @@ class ImplementacionFilaEstatica implements RegistroImpresiones{
 	
 	
 }
+class ImplementacionFilaDinamica implements RegistroImpresiones{
+	Queue<Impresion> filaImpresiones=new LinkedList<Impresion>();
+	private int tamaño;
+	private int poci;
+	public ImplementacionFilaDinamica(int tamaño) {
+		super();
+		this.tamaño = tamaño;
+		poci=-1;
+	}
+	@Override
+	public boolean verificarFilaLlena() {
+		return  poci==tamaño-1;
+	}
+	@Override
+	public boolean verficarFilaVacia() {
+		return filaImpresiones.isEmpty();
+	}
+	@Override
+	public boolean insertarImpresion(Impresion i) {
+		if(!verificarFilaLlena()) {
+			poci++;
+			filaImpresiones.add(i);
+			return true;
+		}
+		return false;
+	}
+	@Override
+	public Impresion eliminarImpresion() {
+		if(verficarFilaVacia()==false) {
+			poci--;
+			return filaImpresiones.poll();
+		}
+		return null;
+	}
+	
+}
 public class Prueba {
 
 	public static void main(String[] args) {
 		Scanner entrada=new Scanner(System.in);
 		System.out.println("Tamaño de la fil sera de 3 pociciones");
-		ImplementacionFilaEstatica FilaE=new ImplementacionFilaEstatica(3);
-		
+		ImplementacionFilaEstatica filaE=new ImplementacionFilaEstatica(3);
+		ImplementacionFilaDinamica filaDi=new ImplementacionFilaDinamica(3);
 		String op="";
 		int id=0;
+		int id2=0;
 		do {
 			System.out.println("A) Agregar a cola de impresion");
 			System.out.println("B) Imprimir");
 			System.out.println("C) Salir");
-			op=entrada.nextLine();
+			op=entrada.nextLine().toUpperCase().replace(" ","");
 			switch (op) {
 			case "A":
 				System.out.println("A que Impresora deseas mandar a imprimir A o B");
@@ -93,8 +132,8 @@ public class Prueba {
 					System.out.println("Numero de hojas que se van a imprimir");
 					try {
 					int num=entrada.nextInt();
-					Impresion im=new Impresion(id++,0.0,num);
-					System.out.println(FilaE.insertarImpresion(im)?"Se mando a la cola de impresion":"No se pudo mandar a la cola de impresion");
+					Impresion im=new Impresion(++id,0.0,num);
+					System.out.println(filaE.insertarImpresion(im)?"Se mando a la cola de impresion":"No se pudo mandar a la cola de impresion");
 					}catch (NumberFormatException e) {
 						System.out.println("Debes de ingresar un numero entero");
 					}
@@ -102,8 +141,8 @@ public class Prueba {
 					System.out.println("Numero de hojas que se van a imprimir");
 					try {
 					int num=entrada.nextInt();
-					Impresion im=new Impresion(id++,0.0,num);
-					
+					Impresion im2=new Impresion(++id,0.0,num);
+					System.out.println(filaDi.insertarImpresion(im2)?"Se mando a la cola de impresion":"No se pudo mandar a la cola de impresion");
 					}catch (NumberFormatException e) {
 						System.out.println("Debes de ingresar un numero entero");
 					}
@@ -115,7 +154,12 @@ public class Prueba {
 				String opB=entrada.nextLine();
 				if(opB.equalsIgnoreCase("A")) {
 					System.out.println("Se imprimio:");
-					System.out.println(FilaE.eliminarImpresion());
+					System.out.println(filaE.eliminarImpresion());
+					id--;
+				}else if(opB.equalsIgnoreCase("B")) {
+					System.out.println("Se imprimio:");
+					System.out.println(filaDi.eliminarImpresion());
+					id2--;
 				}
 				break;
 			case "C":
