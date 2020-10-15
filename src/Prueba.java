@@ -52,13 +52,19 @@ class ImplementacionFilaEstatica implements RegistroImpresiones{
 	}
 	@Override
 	public Impresion eliminarImpresion() {
-		if(!verficarFilaVacia()) {
+		if(verficarFilaVacia()==false) {
+			Impresion retorno=fila[pociFinal];
 			fila[pociFinal]=null;
+			pociFinal--;
 			for(int i=0;i<pociFinal;i++) {
 				fila[i]=fila[i+1];
 			}
+			return retorno;
+		}else {
+			System.out.println("Esta vacia");
+			return null;
 		}
-		return null;
+		
 	}
 	
 	
@@ -105,6 +111,12 @@ public class Prueba {
 				entrada.nextLine();
 				break;
 			case "B":
+				System.out.println("A que Impresora deseas imprimir a imprimir A o B");
+				String opB=entrada.nextLine();
+				if(opB.equalsIgnoreCase("A")) {
+					System.out.println("Se imprimio:");
+					System.out.println(FilaE.eliminarImpresion());
+				}
 				break;
 			case "C":
 				System.out.println("Saliendo");
